@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
@@ -35,8 +37,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .httpBasic().and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/v1/account/signup").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/characters").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/api/v1/characters/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/v1/characters", "/api/v1/series").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/v1/characters/*", "/api/v1/series/*").hasRole("ADMIN")
                 .anyRequest().authenticated();
     }
 }

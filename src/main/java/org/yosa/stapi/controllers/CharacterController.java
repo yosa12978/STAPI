@@ -3,6 +3,7 @@ package org.yosa.stapi.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yosa.stapi.domain.Character;
 import org.yosa.stapi.services.CharacterService;
@@ -26,6 +27,7 @@ public class CharacterController {
         return characterService.getOne(id);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("")
     public ResponseEntity<Character> getCharacter(@RequestBody Character character){
         return new ResponseEntity<>(characterService.create(character), HttpStatus.CREATED);
