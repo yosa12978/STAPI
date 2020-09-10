@@ -20,4 +20,16 @@ public class CharacterService {
     public Character create(Character character){
         return characterRepository.save(character);
     }
+
+    public Character getOne(String id){
+        return characterRepository.findById(id).get();
+    }
+
+    public void delete(String id){
+        characterRepository.delete(characterRepository.findById(id).get());
+    }
+
+    public boolean isCharacterExist(String id){
+        return characterRepository.findById(id).isPresent();
+    }
 }

@@ -1,6 +1,8 @@
 package org.yosa.stapi.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.yosa.stapi.domain.Character;
 import org.yosa.stapi.services.CharacterService;
@@ -19,9 +21,21 @@ public class CharacterController {
         return characterService.getAll();
     }
 
-    @PostMapping("")
-    public Character getCharacter(@RequestBody Character character){
-        return characterService.create(character);
+    @GetMapping("{id}")
+    public Character getCharacter(@PathVariable String id){
+        return characterService.getOne(id);
     }
 
+    @PostMapping("")
+    public ResponseEntity<Character> getCharacter(@RequestBody Character character){
+        return new ResponseEntity<>(characterService.create(character), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteCharacter(@PathVariable String id){
+        if(!characterService.isCharacterExist(id))
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        characterService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

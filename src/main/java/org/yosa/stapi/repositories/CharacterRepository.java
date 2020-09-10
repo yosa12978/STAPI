@@ -1,10 +1,9 @@
 package org.yosa.stapi.repositories;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 import org.yosa.stapi.domain.Character;
 
-import java.util.List;
-
-public interface CharacterRepository extends JpaRepository<Character, Long> {
-    List<Character> fingByOrderByIdDesc();
+@Repository
+public interface CharacterRepository extends MongoRepository<Character, String> {
 }
