@@ -37,8 +37,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .httpBasic().and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/v1/account/signup").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/v1/characters", "/api/v1/series").hasRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/api/v1/characters/*", "/api/v1/series/*").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/v1/characters", "/api/v1/series", "/api/v1/starships").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, "/api/v1/characters/*", "/api/v1/series/*", "/api/v1/starships/*").hasRole("ADMIN")
                 .anyRequest().authenticated();
     }
 }

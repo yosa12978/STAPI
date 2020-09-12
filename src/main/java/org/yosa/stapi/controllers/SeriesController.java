@@ -1,36 +1,52 @@
 package org.yosa.stapi.controllers;
 
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yosa.stapi.domain.Series;
+import org.yosa.stapi.dtos.SeriesDto;
 import org.yosa.stapi.services.SeriesService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/series")
 public class SeriesController {
-    
+
     @Autowired
     private SeriesService seriesService;
+    @Autowired
+    private ModelMapper modelMapper;
+
+    private static Logger logger = LoggerFactory.getLogger(SeriesController.class);
 
     @GetMapping("")
-    public List<Series> getAllSeries(){
-        return seriesService.getAll();
+    public List<SeriesDto> getAllSeries(){
+        List<Series> series = seriesService.getAll();
+        logger.trace("Return series");
+        return modelMapper.map(series, new TypeToken<List<SeriesDto>>(){}.getType());
     }
 
     @GetMapping("{id}")
-    public Series getSeries(@PathVariable String id){
-        return seriesService.getOne(id);
+    public SeriesDto getSeries(@PathVariable String id){
+        Series series = seriesService.getOne(id);
+        logger.trace("Return series with id " + id);
+        return modelMapper.map(series, SeriesDto.class);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("")
-    public ResponseEntity<Series> createSeries(@RequestBody Series series){
-        return new ResponseEntity<>(seriesService.create(series), HttpStatus.CREATED);
+    public ResponseEntity<SeriesDto> createSeries(@RequestBody Series series){
+        Series createdSeries = seriesService.create(series);
+        logger.trace("Created series with id = " + createdSeries.getId());
+        return new ResponseEntity<>(modelMapper.map(seriesService.create(series), SeriesDto.class), HttpStatus.CREATED);
     }
 
     @DeleteMapping("{id}")
@@ -38,6 +54,7 @@ public class SeriesController {
         if(!seriesService.isSeriesExist(id))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         seriesService.delete(id);
+        logger.trace("Deleted series with id = " + id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
