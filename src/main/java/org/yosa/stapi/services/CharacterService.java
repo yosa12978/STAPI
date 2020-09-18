@@ -3,6 +3,7 @@ package org.yosa.stapi.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.yosa.stapi.exceptions.NotFoundException;
 import org.yosa.stapi.repositories.CharacterRepository;
 import org.yosa.stapi.domain.Character;
 
@@ -22,11 +23,17 @@ public class CharacterService {
     }
 
     public Character getOne(String id){
-        return characterRepository.findById(id).get();
+        return characterRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Character doesn't exist"));
+    }
+
+    public List<Character> search(String q){
+        return characterRepository.findByNameRegexOrderByIdDesc(q);
     }
 
     public void delete(String id){
-        characterRepository.delete(characterRepository.findById(id).get());
+        characterRepository.delete(characterRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Character doesn't exist")));
     }
 
     public boolean isCharacterExist(String id){

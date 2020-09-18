@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.yosa.stapi.domain.Starship;
+import org.yosa.stapi.exceptions.NotFoundException;
 import org.yosa.stapi.repositories.StarshipRepository;
 
 import java.util.List;
@@ -18,15 +19,21 @@ public class StarshipService {
     }
 
     public Starship getStarship(String id){
-        return starshipRepository.findById(id).get();
+        return starshipRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Starship doesn't exist"));
     }
 
     public Starship create(Starship starship){
         return starshipRepository.save(starship);
     }
 
+    public List<Starship> search(String title){
+        return starshipRepository.findByTitleRegexOrderByIdDesc(title);
+    }
+
     public void delete(String id){
-        starshipRepository.delete(starshipRepository.findById(id).get());
+        starshipRepository.delete(starshipRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Starship doesn't exist")));
     }
 
     public boolean isStarshipExist(String id){

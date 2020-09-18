@@ -1,14 +1,16 @@
 package org.yosa.stapi.dtos;
 
+import java.util.List;
+
 public class CharacterDto {
     private String id;
     private String name;
-    private String race;
+    private RaceDto race;
 
     public CharacterDto() {
     }
 
-    public CharacterDto(String id, String name, String race) {
+    public CharacterDto(String id, String name, RaceDto race) {
         this.id = id;
         this.name = name;
         this.race = race;
@@ -30,11 +32,11 @@ public class CharacterDto {
         this.name = name;
     }
 
-    public String getRace() {
+    public RaceDto getRace() {
         return race;
     }
 
-    public void setRace(String race) {
+    public void setRace(RaceDto race) {
         this.race = race;
     }
 }

@@ -30,22 +30,29 @@ public class SeriesController {
     @GetMapping("")
     public List<SeriesDto> getAllSeries(){
         List<Series> series = seriesService.getAll();
-        logger.trace("Return series");
+        logger.info("Return series");
         return modelMapper.map(series, new TypeToken<List<SeriesDto>>(){}.getType());
     }
 
     @GetMapping("{id}")
     public SeriesDto getSeries(@PathVariable String id){
         Series series = seriesService.getOne(id);
-        logger.trace("Return series with id " + id);
+        logger.info("Return series with id " + id);
         return modelMapper.map(series, SeriesDto.class);
+    }
+
+    @GetMapping("search")
+    public List<SeriesDto> searchSeries(@RequestParam("q") String query){
+        List<Series> series = seriesService.search(query);
+        logger.info("Search series with query = " + query);
+        return modelMapper.map(series, new TypeToken<List<SeriesDto>>(){}.getType());
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("")
     public ResponseEntity<SeriesDto> createSeries(@RequestBody Series series){
         Series createdSeries = seriesService.create(series);
-        logger.trace("Created series with id = " + createdSeries.getId());
+        logger.info("Created series with id = " + createdSeries.getId());
         return new ResponseEntity<>(modelMapper.map(seriesService.create(series), SeriesDto.class), HttpStatus.CREATED);
     }
 
@@ -54,7 +61,7 @@ public class SeriesController {
         if(!seriesService.isSeriesExist(id))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         seriesService.delete(id);
-        logger.trace("Deleted series with id = " + id);
+        logger.info("Deleted series with id = " + id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

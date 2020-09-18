@@ -30,22 +30,29 @@ public class StarshipController {
     @GetMapping("")
     public List<StarshipDto> getAll(){
         List<Starship> starships = starshipService.getStarships();
-        logger.trace("Return starships");
+        logger.info("Return starships");
         return modelMapper.map(starships, new TypeToken<List<StarshipDto>>(){}.getType());
     }
 
     @GetMapping("{id}")
     public StarshipDto getOne(@PathVariable String id){
         Starship starship = starshipService.getStarship(id);
-        logger.trace("Return starship with id = " + id);
+        logger.info("Return starship with id = " + id);
         return modelMapper.map(starship, StarshipDto.class);
+    }
+
+    @GetMapping("search")
+    public List<StarshipDto> searchStarship(@RequestParam("q") String query){
+        List<Starship> starships = starshipService.search(query);
+        logger.info("Search starships with query = " + query);
+        return modelMapper.map(starships, new TypeToken<List<StarshipDto>>(){}.getType());
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("")
     public ResponseEntity<StarshipDto> createStarship(@RequestBody Starship starship){
         Starship createdStarship = starshipService.create(starship);
-        logger.trace("Created starship with id = " + createdStarship.getId());
+        logger.info("Created starship with id = " + createdStarship.getId());
         return new ResponseEntity<>(modelMapper.map(createdStarship, StarshipDto.class), HttpStatus.CREATED);
     }
 
@@ -54,7 +61,7 @@ public class StarshipController {
         if(!starshipService.isStarshipExist(id))
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         starshipService.delete(id);
-        logger.trace("Deleted starship with id = " + id);
+        logger.info("Deleted starship with id = " + id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

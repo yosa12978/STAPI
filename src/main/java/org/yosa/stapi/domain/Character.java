@@ -8,13 +8,13 @@ public class Character {
     @Id
     private String id;
     private String name;
-    private String race;
+    private Race race;
 
     public Character() {
 
     }
 
-    public Character(String name, String race) {
+    public Character(String name, Race race) {
         this.name = name;
         this.race = race;
     }
@@ -35,11 +35,11 @@ public class Character {
         this.name = name;
     }
 
-    public String getRace() {
+    public Race getRace() {
         return race;
     }
 
-    public void setRace(String race) {
+    public void setRace(Race race) {
         this.race = race;
     }
 }
