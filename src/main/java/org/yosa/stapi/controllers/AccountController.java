@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.yosa.stapi.domain.Account;
 import org.yosa.stapi.dtos.AccountReadDto;
+import org.yosa.stapi.exceptions.BadRequestException;
 import org.yosa.stapi.services.AccountService;
 
 @RestController
@@ -21,7 +22,7 @@ public class AccountController {
     @PostMapping("signup")
     public ResponseEntity<Account> signup(@RequestBody AccountReadDto account){
         if(accountService.isAccountExist(account.username))
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            throw new BadRequestException("Username is already in use");
         return new ResponseEntity<>(accountService.save(account.username, account.password), HttpStatus.CREATED);
     }
 }

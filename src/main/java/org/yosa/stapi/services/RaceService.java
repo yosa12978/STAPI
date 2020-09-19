@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.yosa.stapi.domain.Race;
+import org.yosa.stapi.exceptions.BadRequestException;
 import org.yosa.stapi.exceptions.NotFoundException;
 import org.yosa.stapi.repositories.RaceRepository;
 
@@ -45,6 +46,9 @@ public class RaceService {
     }
 
     public Race getRaceByName(String name){
-        return raceRepository.findByName(name);
+        Race race = raceRepository.findByName(name);
+        if(race == null)
+            throw new BadRequestException("Race doesn't exist");
+        return race;
     }
 }
