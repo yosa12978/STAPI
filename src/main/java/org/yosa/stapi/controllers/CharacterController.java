@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import org.yosa.stapi.domain.Character;
 import org.yosa.stapi.dtos.CharacterDto;
 import org.yosa.stapi.dtos.CharacterReadDto;
+import org.yosa.stapi.exceptions.NotFoundException;
 import org.yosa.stapi.services.CharacterService;
 import org.yosa.stapi.services.RaceService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -63,7 +63,7 @@ public class CharacterController {
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteCharacter(@PathVariable String id){
         if(!characterService.isCharacterExist(id))
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new NotFoundException("Character with id = " + id + " doesn't exist");
         characterService.delete(id);
         logger.info("Deleted character with id = " + id);
         return new ResponseEntity<>(HttpStatus.OK);

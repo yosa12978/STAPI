@@ -18,7 +18,7 @@ Global host name : https://star-trek-api.herokuapp.com
 
 #### Authentication
 
-Currently app supports only basic authentication
+Currently app supports only jwt authentication
 
 To sign up send POST request to 
 ```http
@@ -33,58 +33,65 @@ With body
 }
 ```
 
-Authentication Example:
+Soon you should send POST request to get token
 ```http
-https://username:password@star-trek-api.herokuapp.com/
+https://star-trek-api.herokuapp.com/api/v1/account/login
 ```  
 
+With body
+```json
+{
+  "username": "username",
+  "password": "password"
+}
+```
 
 ---
 
 #### Routes
 
-```http
+```
 GET https://star-trek-api.herokuapp.com/api/v1/characters
 ```
-```http
+```
 GET https://star-trek-api.herokuapp.com/api/v1/characters/{id}
 ```
-```http
+```
 GET https://star-trek-api.herokuapp.com/api/v1/characters/search?q={search query}
 ```
-```http
+```
 GET https://star-trek-api.herokuapp.com/api/v1/series
 ```
-```http
+```
 GET https://star-trek-api.herokuapp.com/api/v1/series/{id}
 ```
-```http
+```
 GET https://star-trek-api.herokuapp.com/api/v1/series/search?q={search query}
 ```
-```http
+```
 GET https://star-trek-api.herokuapp.com/api/v1/starships
 ```
-```http
+```
 GET https://star-trek-api.herokuapp.com/api/v1/starships/{id}
 ```
-```http
+```
 GET https://star-trek-api.herokuapp.com/api/v1/starships/search?q={search query}
 ```
-```http
+```
 GET https://star-trek-api.herokuapp.com/api/v1/planets
 ```
-```http
+```
 GET https://star-trek-api.herokuapp.com/api/v1/planets/{id}
 ```
-```http
+```
 GET https://star-trek-api.herokuapp.com/api/v1/planets/search?q={search query}
 ```
-```http
+```
 GET https://star-trek-api.herokuapp.com/api/v1/races
 ```
-```http
+```
 GET https://star-trek-api.herokuapp.com/api/v1/races/{id}
 ```
-```http
+```
 GET https://star-trek-api.herokuapp.com/api/v1/races/search?q={search query}
 ```

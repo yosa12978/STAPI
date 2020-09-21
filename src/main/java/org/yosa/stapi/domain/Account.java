@@ -17,6 +17,8 @@ public class Account {
     private String password;
     private Set<Role> roles;
 
+    private String token;
+
     public Account() {
     }
 
@@ -58,5 +60,13 @@ public class Account {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

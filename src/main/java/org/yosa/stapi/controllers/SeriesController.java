@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yosa.stapi.domain.Series;
 import org.yosa.stapi.dtos.SeriesDto;
+import org.yosa.stapi.exceptions.BadRequestException;
 import org.yosa.stapi.services.SeriesService;
 
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class SeriesController {
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteSeries(@PathVariable String id){
         if(!seriesService.isSeriesExist(id))
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new BadRequestException("Series with id = " + id + " doesn't exist");
         seriesService.delete(id);
         logger.info("Deleted series with id = " + id);
         return new ResponseEntity<>(HttpStatus.OK);

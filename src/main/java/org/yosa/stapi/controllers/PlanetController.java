@@ -13,6 +13,7 @@ import org.yosa.stapi.domain.Planet;
 import org.yosa.stapi.domain.Race;
 import org.yosa.stapi.dtos.PlanetDto;
 import org.yosa.stapi.dtos.PlanetReadDto;
+import org.yosa.stapi.exceptions.BadRequestException;
 import org.yosa.stapi.services.PlanetService;
 import org.yosa.stapi.services.RaceService;
 
@@ -69,7 +70,7 @@ public class PlanetController {
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deletePlanet(@PathVariable String id){
         if(!planetService.isPlanetExist(id))
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new BadRequestException("Planet with id = " + id + " doesn't exist");
         planetService.delete(id);
         logger.info("Deleted planet with id = " + id);
         return new ResponseEntity<>(HttpStatus.OK);

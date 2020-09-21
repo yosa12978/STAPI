@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yosa.stapi.domain.Race;
 import org.yosa.stapi.dtos.RaceDto;
+import org.yosa.stapi.exceptions.BadRequestException;
 import org.yosa.stapi.services.RaceService;
 
 import java.util.List;
@@ -57,7 +58,7 @@ public class RaceController {
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteRace(@PathVariable String id){
         if(!raceService.isRaceExist(id))
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new BadRequestException("race with id = " + id + " doesn't exist");
         raceService.delete(id);
         logger.info("Deleted race with id = " + id);
         return new ResponseEntity<>(HttpStatus.OK);

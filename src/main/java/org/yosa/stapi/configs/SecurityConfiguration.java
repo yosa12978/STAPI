@@ -13,6 +13,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.yosa.stapi.security.JWTAuthorizationFilter;
+
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -35,12 +37,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception{
         http.csrf().disable()
-                .httpBasic().and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/api/v1/account/signup").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/v1/account/signup/", "/api/v1/account/login").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/v1/characters", "/api/v1/series", "/api/v1/starships").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/v1/characters/*", "/api/v1/series/*", "/api/v1/starships/*").hasRole("ADMIN")
                 .anyRequest().authenticated()
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .and()
+                .addFilter(new JWTAuthorizationFilter(authenticationManager()))
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 }

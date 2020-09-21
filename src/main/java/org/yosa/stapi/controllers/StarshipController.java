@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.yosa.stapi.domain.Starship;
 import org.yosa.stapi.dtos.StarshipDto;
+import org.yosa.stapi.exceptions.BadRequestException;
 import org.yosa.stapi.services.StarshipService;
 
 import java.util.ArrayList;
@@ -59,7 +60,7 @@ public class StarshipController {
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteStarship(@PathVariable String id){
         if(!starshipService.isStarshipExist(id))
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new BadRequestException("Starship with id = " + id + " doesn't exist");
         starshipService.delete(id);
         logger.info("Deleted starship with id = " + id);
         return new ResponseEntity<>(HttpStatus.OK);
